@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>RxJS Subjects</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <h1>RxJS Subjects Demo</h1>
+    <hr />
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3>Immediate Subscription</h3>
+                <figure>
+                    <h4>Subject (live feed only)</h4>
+                    <div id="js-subject"></div>
+                </figure>
+
+                <figure>
+                    <h4>Behavior Subject (previous value + live feed)</h4>
+                    <div id="js-behavior-subject"></div>
+                </figure>
+
+                <figure>
+                    <h4>Replay Subject (all previous values + live feed)</h4>
+                    <div id="js-replay-subject"></div>
+                </figure>
+
+                <figure>
+                    <h4>Async Subject (final "completed" value only)</h4>
+                    <div id="js-async-subject"></div>
+                </figure>
+            </div>
+            <div class="col">
+                <h3>Delayed Subscription</h3>
+                <figure>
+                    <h4>Subject (live feed only)</h4>
+                    <div id="js-delayed-subject"></div>
+                </figure>
+
+                <figure>
+                    <h4>Behavior Subject (previous value + live feed)</h4>
+                    <div id="js-delayed-behavior-subject"></div>
+                </figure>
+
+                <figure>
+                    <h4>Replay Subject (all previous values + live feed)</h4>
+                    <div id="js-delayed-replay-subject"></div>
+                </figure>
+
+                <figure>
+                    <h4>Async Subject (final "completed" value only)</h4>
+                    <div id="js-delayed-async-subject"></div>
+                </figure>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/6.4.0/rxjs.umd.min.js"></script>
+    <script src="./rxjsDemo.js"></script>
+    <script>
+        function run() {
+            function getElem(id) {
+                return document.getElementById('js-' + id);
+            }
+
+            function appendToUl(elem, text) {
+                if (elem.innerHTML.trim().length > 0) {
+                    elem.innerHTML += ', ' + text;
+                } else {
+                    elem.innerHTML += text;
+                }
+            }
+
+            var initElements = {
+                subject: getElem('subject'),
+                behaviorSubject: getElem('behavior-subject'),
+                replaySubject: getElem('replay-subject'),
+                asyncSubject: getElem('async-subject')
+            };
+
+            var delayedElements = {
+                subject: getElem('delayed-subject'),
+                behaviorSubject: getElem('delayed-behavior-subject'),
+                replaySubject: getElem('delayed-replay-subject'),
+                asyncSubject: getElem('delayed-async-subject')
+            };
+
+            rxjsDemo.subjectObservable$.subscribe(data => {
+                appendToUl(initElements.subject, data);
+            });
+
+            rxjsDemo.behaviorSubjectObservable$.subscribe(data => {
+                appendToUl(initElements.behaviorSubject, data);
+            });
+
+            rxjsDemo.replaySubjectObservable$.subscribe(data => {
+                appendToUl(initElements.replaySubject, data);
+            });
+
+            rxjsDemo.asyncSubjectObservable$.subscribe(data => {
+                appendToUl(initElements.asyncSubject, data);
+            });
+
+            rxjsDemo.start();
+
+            setTimeout(() => {
+                rxjsDemo.subjectObservable$.subscribe(data => {
+                    appendToUl(delayedElements.subject, data);
+                });
+
+                rxjsDemo.behaviorSubjectObservable$.subscribe(data => {
+                    appendToUl(delayedElements.behaviorSubject, data);
+                });
+
+                rxjsDemo.replaySubjectObservable$.subscribe(data => {
+                    appendToUl(delayedElements.replaySubject, data);
+                });
+
+                rxjsDemo.asyncSubjectObservable$.subscribe(data => {
+                    appendToUl(delayedElements.asyncSubject, data);
+                });
+            }, 50);
+        }
+
+        document.addEventListener('DOMContentLoaded', run);
+    </script>
+</body>
+
+</html>
