@@ -26,7 +26,7 @@ var rxjsDemo = function () {
                 asyncSubject$.complete();
                 clearInterval(interval);
             }
-        }, 10)
+        }, 1000)
     }
 
     return {
